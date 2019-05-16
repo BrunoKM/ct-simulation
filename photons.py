@@ -41,6 +41,6 @@ def photons(original_energy, coeff, depth) -> np.ndarray:
         raise ValueError('input depth has different number of samples to input original_energy')
 
     # Work out residual energy for each depth and at each energy
-    residual_energy = original_energy * np.exp(- coeff[:, None] * depth[None, :])
+    residual_energy = original_energy * np.exp(- np.outer(coeff, depth))
 
     return residual_energy

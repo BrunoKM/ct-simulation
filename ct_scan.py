@@ -6,7 +6,7 @@ import math
 import sys
 
 
-def ct_scan(photons, material, phantom, scale, angles, mas=10000):
+def ct_scan(photons, material, phantom, scale, angles, mas=10000, interpolation_order: int = 1):
     """simulate CT scanning of an object
     scan = ct_scan(photons, material, phantom, scale, angles, mas) takes a phantom
     which contains indices relating to the attenuation coefficients given in
@@ -48,7 +48,8 @@ def ct_scan(photons, material, phantom, scale, angles, mas=10000):
         depth = np.zeros((len(material.coeffs), n))
 
         for index, m in enumerate(materials):
-            interpolated = scipy.ndimage.map_coordinates(material_phantom[index], [y0, x0], order=1, mode='constant',
+            interpolated = scipy.ndimage.map_coordinates(material_phantom[index], [y0, x0], order=interpolation_order,
+                                                         mode='constant',
                                                          prefilter=False)
             depth[m] = np.sum(interpolated, axis=0)
 

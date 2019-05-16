@@ -6,7 +6,7 @@ from back_project import *
 from hu import *
 
 
-def scan_and_reconstruct(photons, material, phantom, scale, angles, mas=10000, alpha=0.001):
+def scan_and_reconstruct(photon_source, material, phantom, scale, angles, mas=10000, alpha=0.001):
     """ Simulation of the CT scanning process
         reconstruction = scan_and_reconstruct(photons, material, phantom, scale, angles, mas, alpha)
         takes the phantom data in phantom (samples x samples), scans it using the
@@ -15,15 +15,46 @@ def scan_and_reconstruct(photons, material, phantom, scale, angles, mas=10000, a
         alpha for filtering. The output reconstruction is the same size as phantom."""
 
     # convert source (photons per (mas, cm^2)) to photons
+    # todo:
 
     # create sinogram from phantom data, with received detector values
+    sinogram = ct_scan(photon_source, material, phantom, scale, angles, interpolation_order=1)
 
     # convert detector values into calibrated attenuation values
+    total_attenuation = ct_calibrate(photon_source, material, sinogram, scale)
 
     # Ram-Lak
+    filtered_sinogram = ramp_filter(total_attenuation, scale, alpha=alpha)
+    # filtered_sinogram = total_attenuation
 
     # Back-projection
+    backprojection = back_project(filtered_sinogram)
 
-    # convert to Hounsfield Units
+    # todo: convert to Hounsfield Units
 
-    return phantom
+    return backprojection
+
+
+def scan_and_backproject(photon_source, material, phantom, scale, angles, mas=10000, alpha=0.001):
+    """
+    Scan and backproject without convolving with a RamLak filter. Use for report and demonstration only.
+    """
+
+    # convert source (photons per (mas, cm^2)) to photons
+    # todo:
+
+    # create sinogram from phantom data, with received detector values
+    sinogram = ct_scan(photon_source, material, phantom, scale, angles, interpolation_order=1)
+
+    # convert detector values into calibrated attenuation values
+    total_attenuation = ct_calibrate(photon_source, material, sinogram, scale)
+
+    # Ram-Lak
+    # todo:
+
+    # Back-projection
+    backprojection = back_project(sinogram)
+
+    # todo: convert to Hounsfield Units
+
+    return backprojection
