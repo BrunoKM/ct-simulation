@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import seaborn as sns
+
+sns.set()
 
 
 def draw(data, map='gray', caxis=None):

@@ -6,24 +6,24 @@ START = MEV_INCREMENT
 END = .2 + START
 
 
-class Material(object):
+class MaterialData(object):
     def __init__(self):
-        """Material holds materal, mev, and coeff information"""
+        """Material holds material names, mev, and coeff information"""
 
-        self.name = ['Air', 'Adipose', 'Soft Tissue', 'Breast Tissue', 'Water', 'Blood', 'Bone', 'Titanium', 'Cobalt',
+        self.names = ['Air', 'Adipose', 'Soft Tissue', 'Breast Tissue', 'Water', 'Blood', 'Bone', 'Titanium', 'Cobalt',
                      'Chromium', 'Iron', 'Carbon', 'Nickel', 'Magnesium', 'Aluminium', 'Copper', 'Co-Cr',
                      'Stainless Steel']
         self.mev = np.arange(START, END, MEV_INCREMENT)
         self.coeffs = self.init_coeffs()
 
-    def coeff(self, input):
+    def coeff(self, material_name):
         """Given a input material name, this returns the coeff for that material"""
 
         try:
-            index = self.name.index(input)
+            index = self.names.index(material_name)
             result = self.coeffs[index]
         except ValueError:
-            raise Exception('name ' + input + ' not found. Acceptable names include: ' + str(self.name))
+            raise Exception('name ' + material_name + ' not found. Acceptable names include: ' + str(self.names))
 
         return result
 

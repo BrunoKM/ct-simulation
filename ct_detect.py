@@ -1,11 +1,12 @@
 import numpy as np
-from photons import photons
-from source import Source
-from material import Material
+from photons import simulate_photons
+from photonsource_data import PhotonSourceData
+from material_data import MaterialData
 
 
 def ct_detect(photon_source: np.ndarray, coeffs, depth, mas=10000) -> np.ndarray:
-    """ct_detect returns detector photons for given material depths.
+    """
+    ct_detect returns detector photons for given material depths.
     y = ct_detect(p, coeffs, depth, mas) takes a source energy
     distribution photons (energies), a set of material linear attenuation
     coefficients coeffs (materials, energies), and a set of material depths
@@ -13,7 +14,8 @@ def ct_detect(photon_source: np.ndarray, coeffs, depth, mas=10000) -> np.ndarray
     in y (samples).
 
     mas defines the current-time-product which affects the noise distribution
-    for the linear attenuation"""
+    for the linear attenuation
+    """
 
     # check photon_source for number of energies
     if not isinstance(photon_source, np.ndarray):
@@ -52,7 +54,7 @@ def ct_detect(photon_source: np.ndarray, coeffs, depth, mas=10000) -> np.ndarray
 
     # calculate array of residual mev x samples for each material in turn
     for m in range(n_materials):
-        detector_photons = photons(detector_photons, coeffs[m], depth[m])
+        detector_photons = simulate_photons(detector_photons, coeffs[m], depth[m])
 
     # sum this over energies
     detector_photons = np.sum(detector_photons, axis=0)
